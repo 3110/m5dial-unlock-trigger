@@ -4,14 +4,16 @@ static const bool FORMAT_SPIFFS_IF_FAILED = true;
 const char* M5ComboLock::LOCK_ICON_PATH = "/lock.png";
 const char* M5ComboLock::UNLOCK_ICON_PATH = "/unlock.png";
 
-M5ComboLock::M5ComboLock(void)
+M5ComboLock::M5ComboLock(const lgfx::GFXfont& font)
     : _onValid(nullptr),
       _prevCount(LONG_MIN),
       _prevElapsed(0),
       _pos(0),
       _maxPos(0),
       _dials{0},
-      _state(State::NOT_ENTERED) {
+      _state(State::NOT_ENTERED),
+      _count_font(&font),
+      _canvas(&M5Dial.Display) {
 }
 
 M5ComboLock::~M5ComboLock(void) {
@@ -35,10 +37,7 @@ bool M5ComboLock::begin(const int8_t dials[], size_t len,
         return false;
     }
 
-    M5Dial.Display.setTextColor(GREEN);
-    M5Dial.Display.setTextDatum(middle_center);
-    M5Dial.Display.setFont(&fonts::Orbitron_Light_32);
-    M5Dial.Display.setTextSize(1);
+    reset();
 
     return true;
 }
@@ -74,6 +73,7 @@ bool M5ComboLock::update(void) {
                 if (this->_dials[this->_pos] == count) {
                     if (this->_pos + 1 == this->_maxPos) {
                         this->_state = State::VALID;
+                        showLockIcon(false);
                         if (this->_onValid) {
                             this->_onValid();
                         }
@@ -93,13 +93,6 @@ bool M5ComboLock::update(void) {
             }
         }
     }
-
-    if (this->_state == State::VALID) {
-        showLock(false);
-    } else {
-        showLock(true);
-    }
-
     return true;
 }
 
@@ -114,19 +107,33 @@ M5ComboLock::count_t M5ComboLock::getCount(void) const {
 void M5ComboLock::reset(void) {
     this->_state = State::NOT_ENTERED;
     this->_pos = 0;
+    showLockIcon(true);
     resetDial();
 }
 
 void M5ComboLock::showDialCount(count_t count) {
-    M5Dial.Display.clear();
-    M5Dial.Display.drawString(String(count), M5Dial.Display.width() / 2,
-                              M5Dial.Display.height() / 2 + DIAL_POS_Y_OFFSET);
+    const String s = String(count);
+    const int32_t w = M5.Display.width();
+    const int32_t h = M5.Display.fontHeight(this->_count_font);
+    this->_canvas.createSprite(w, h);
+    this->_canvas.setFont(this->_count_font);
+    this->_canvas.setTextSize(1);
+    this->_canvas.setTextColor(GREEN);
+    this->_canvas.clear(TFT_BLACK);
+    this->_canvas.drawCenterString(s, M5Dial.Display.width() / 2, 0,
+                                   this->_count_font);
+    this->_canvas.pushSprite(
+        0, M5Dial.Display.height() / 2 + DIAL_COUNT_POS_Y_OFFSET);
+    this->_canvas.deleteSprite();
 }
 
-void M5ComboLock::showLock(bool locked) {
-    M5Dial.Display.drawPngFile(SPIFFS,
-                               locked ? LOCK_ICON_PATH : UNLOCK_ICON_PATH,
-                               ICON_POS_X, ICON_POS_Y);
+void M5ComboLock::showLockIcon(bool locked) {
+    this->_canvas.createSprite(ICON_WIDTH, ICON_HEIGHT);
+    this->_canvas.clear(TFT_BLACK);
+    this->_canvas.drawPngFile(SPIFFS,
+                              locked ? LOCK_ICON_PATH : UNLOCK_ICON_PATH);
+    this->_canvas.pushSprite(ICON_POS_X, ICON_POS_Y);
+    this->_canvas.deleteSprite();
 }
 
 void M5ComboLock::resetDial(void) {

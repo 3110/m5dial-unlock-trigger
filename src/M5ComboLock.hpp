@@ -17,10 +17,12 @@ public:
     static const unsigned long DIAL_INTERVAL_MS = 1500;
     static const unsigned long DIAL_TIMEOUT_MS = 5000;
 
-    static const uint16_t DIAL_POS_Y_OFFSET = 70;
+    static const uint16_t DIAL_COUNT_POS_Y_OFFSET = 50;
 
     static const char* LOCK_ICON_PATH;
     static const char* UNLOCK_ICON_PATH;
+    static const uint16_t ICON_WIDTH = 64;
+    static const uint16_t ICON_HEIGHT = 64;
     static const uint16_t ICON_POS_X = 90;
     static const uint16_t ICON_POS_Y = 90;
 
@@ -31,7 +33,7 @@ public:
         VALID,
     };
 
-    M5ComboLock(void);
+    M5ComboLock(const lgfx::GFXfont& font = fonts::Orbitron_Light_32);
     virtual ~M5ComboLock(void);
 
     virtual bool begin(const int8_t dials[], size_t len,
@@ -45,7 +47,7 @@ public:
 
 protected:
     virtual void showDialCount(count_t count);
-    virtual void showLock(bool locked);
+    virtual void showLockIcon(bool locked);
     virtual void resetDial(void);
 
 private:
@@ -59,4 +61,7 @@ private:
     int8_t _dials[MAX_DIALS];
 
     State _state;
+
+    const lgfx::GFXfont* _count_font;
+    M5Canvas _canvas;
 };
