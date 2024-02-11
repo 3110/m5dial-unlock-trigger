@@ -67,8 +67,8 @@ bool M5ComboLock::update(void) {
                         ++this->_pos;
                         M5_LOGD("Matched: %d/%d", this->_pos, this->_maxPos);
                     }
-                    resetDial();
                 }
+                resetDial();
             } else if (this->_state == State::ENTERING) {
                 if (this->_dials[this->_pos] == count) {
                     if (this->_pos + 1 == this->_maxPos) {
