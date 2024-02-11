@@ -107,9 +107,8 @@ bool M5ComboLock::isRoteted(void) const {
     return getCount() != this->_prevCount;
 }
 
-int32_t M5ComboLock::getCount(void) const {
-    return ((M5Dial.Encoder.read() + DIAL_COUNTER_STEP) / DIAL_COUNTER_STEP) -
-           1;
+M5ComboLock::count_t M5ComboLock::getCount(void) const {
+    return ((M5Dial.Encoder.read() + DIAL_COUNT_STEP) / DIAL_COUNT_STEP) - 1;
 }
 
 void M5ComboLock::reset(void) {
@@ -118,7 +117,7 @@ void M5ComboLock::reset(void) {
     resetDial();
 }
 
-void M5ComboLock::showDialCount(int32_t count) {
+void M5ComboLock::showDialCount(count_t count) {
     M5Dial.Display.clear();
     M5Dial.Display.drawString(String(count), M5Dial.Display.width() / 2,
                               M5Dial.Display.height() / 2 + DIAL_POS_Y_OFFSET);

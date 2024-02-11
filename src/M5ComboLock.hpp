@@ -7,11 +7,13 @@
 
 class M5ComboLock {
 public:
+    typedef int32_t count_t;
+
     static const bool ENABLE_ENCODER = true;
     static const bool ENABLE_RFID = false;
 
     static const size_t MAX_DIALS = 10;
-    static const uint8_t DIAL_COUNTER_STEP = 4;
+    static const count_t DIAL_COUNT_STEP = 4;
     static const unsigned long DIAL_INTERVAL_MS = 1500;
     static const unsigned long DIAL_TIMEOUT_MS = 5000;
 
@@ -37,18 +39,19 @@ public:
     virtual bool update(void);
 
     virtual bool isRoteted(void) const;
-    virtual int32_t getCount(void) const;
+    virtual count_t getCount(void) const;
+
     virtual void reset(void);
 
 protected:
-    virtual void showDialCount(int32_t pos);
+    virtual void showDialCount(count_t count);
     virtual void showLock(bool locked);
     virtual void resetDial(void);
 
 private:
     std::function<bool(void)> _onValid;
 
-    int32_t _prevCount;
+    count_t _prevCount;
     unsigned long _prevElapsed;
 
     size_t _pos;
