@@ -6,7 +6,7 @@ const char* M5ComboLock::UNLOCK_ICON_PATH = "/unlock.png";
 
 M5ComboLock::M5ComboLock(void)
     : _onValid(nullptr),
-      _prevPos(LONG_MIN),
+      _prevCount(LONG_MIN),
       _prevElapsed(0),
       _pos(0),
       _maxPos(0),
@@ -49,14 +49,23 @@ bool M5ComboLock::begin(const int8_t dials[], size_t len,
     return true;
 }
 
+bool M5ComboLock::isRoteted(void) const {
+    return getCount() != this->_prevCount;
+}
+
+int32_t M5ComboLock::getCount(void) const {
+    return ((M5Dial.Encoder.read() + DIAL_COUNTER_STEP) / DIAL_COUNTER_STEP) -
+           1;
+}
+
 bool M5ComboLock::update(void) {
-    const long curPos = M5Dial.Encoder.read();
+    const int32_t count = getCount();
     const unsigned long elapsed = millis();
     unsigned long interval = elapsed - this->_prevElapsed;
 
-    if (curPos != this->_prevPos) {
-        this->_prevPos = curPos;
-        showDialPosition(curPos);
+    if (isRoteted()) {
+        this->_prevCount = count;
+        showDialPosition(count);
         this->_prevElapsed = elapsed;
     } else {
         if (interval > DIAL_TIMEOUT_MS) {
@@ -64,7 +73,7 @@ bool M5ComboLock::update(void) {
             reset();
         } else if (interval > DIAL_INTERVAL_MS) {
             if (this->_state == State::NOT_ENTERED) {
-                if (this->_dials[this->_pos] == curPos) {
+                if (this->_dials[this->_pos] == count) {
                     if (this->_pos + 1 == this->_maxPos) {
                         this->_state = State::VALID;
                         M5_LOGD("State: Valid");
@@ -77,7 +86,7 @@ bool M5ComboLock::update(void) {
                     resetDial();
                 }
             } else if (this->_state == State::ENTERING) {
-                if (this->_dials[this->_pos] == curPos) {
+                if (this->_dials[this->_pos] == count) {
                     if (this->_pos + 1 == this->_maxPos) {
                         this->_state = State::VALID;
                         if (this->_onValid) {
@@ -118,8 +127,8 @@ void M5ComboLock::reset(void) {
 void M5ComboLock::resetDial(void) {
     M5Dial.Encoder.readAndReset();
     this->_prevElapsed = millis();
-    this->_prevPos = M5Dial.Encoder.read();
-    showDialPosition(this->_prevPos);
+    this->_prevCount = getCount();
+    showDialPosition(this->_prevCount);
 }
 
 void M5ComboLock::showLock(bool locked) {

@@ -11,6 +11,7 @@ public:
     static const bool ENABLE_RFID = false;
 
     static const size_t MAX_DIALS = 10;
+    static const uint8_t DIAL_COUNTER_STEP = 4;
     static const unsigned long DIAL_INTERVAL_MS = 1500;
     static const unsigned long DIAL_TIMEOUT_MS = 5000;
 
@@ -34,6 +35,8 @@ public:
     virtual bool begin(const int8_t dials[], size_t len,
                        std::function<bool(void)> onValid = nullptr);
     virtual bool update(void);
+    virtual bool isRoteted(void) const;
+    virtual int32_t getCount(void) const;
 
     virtual void reset(void);
 
@@ -44,9 +47,10 @@ protected:
 
 private:
     std::function<bool(void)> _onValid;
-    long _prevPos;
 
+    int32_t _prevCount;
     unsigned long _prevElapsed;
+
     size_t _pos;
     size_t _maxPos;
     int8_t _dials[MAX_DIALS];
