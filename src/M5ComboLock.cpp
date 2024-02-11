@@ -17,12 +17,6 @@ M5ComboLock::M5ComboLock(void)
 M5ComboLock::~M5ComboLock(void) {
 }
 
-void M5ComboLock::showDialPosition(long pos) {
-    M5Dial.Display.clear();
-    M5Dial.Display.drawString(String(pos), M5Dial.Display.width() / 2,
-                              M5Dial.Display.height() / 2 + DIAL_POS_Y_OFFSET);
-}
-
 bool M5ComboLock::begin(const int8_t dials[], size_t len,
                         std::function<bool(void)> onValid) {
     if (len > MAX_DIALS) {
@@ -65,7 +59,7 @@ bool M5ComboLock::update(void) {
 
     if (isRoteted()) {
         this->_prevCount = count;
-        showDialPosition(count);
+        showDialCount(count);
         this->_prevElapsed = elapsed;
     } else {
         if (interval > DIAL_TIMEOUT_MS) {
@@ -124,11 +118,17 @@ void M5ComboLock::reset(void) {
     resetDial();
 }
 
+void M5ComboLock::showDialCount(int32_t count) {
+    M5Dial.Display.clear();
+    M5Dial.Display.drawString(String(count), M5Dial.Display.width() / 2,
+                              M5Dial.Display.height() / 2 + DIAL_POS_Y_OFFSET);
+}
+
 void M5ComboLock::resetDial(void) {
     M5Dial.Encoder.readAndReset();
     this->_prevElapsed = millis();
     this->_prevCount = getCount();
-    showDialPosition(this->_prevCount);
+    showDialCount(this->_prevCount);
 }
 
 void M5ComboLock::showLock(bool locked) {

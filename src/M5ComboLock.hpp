@@ -41,7 +41,7 @@ public:
     virtual void reset(void);
 
 protected:
-    virtual void showDialPosition(long pos);
+    virtual void showDialCount(int32_t pos);
     virtual void showLock(bool locked);
     virtual void resetDial(void);
 
