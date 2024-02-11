@@ -43,15 +43,6 @@ bool M5ComboLock::begin(const int8_t dials[], size_t len,
     return true;
 }
 
-bool M5ComboLock::isRoteted(void) const {
-    return getCount() != this->_prevCount;
-}
-
-int32_t M5ComboLock::getCount(void) const {
-    return ((M5Dial.Encoder.read() + DIAL_COUNTER_STEP) / DIAL_COUNTER_STEP) -
-           1;
-}
-
 bool M5ComboLock::update(void) {
     const int32_t count = getCount();
     const unsigned long elapsed = millis();
@@ -112,6 +103,15 @@ bool M5ComboLock::update(void) {
     return true;
 }
 
+bool M5ComboLock::isRoteted(void) const {
+    return getCount() != this->_prevCount;
+}
+
+int32_t M5ComboLock::getCount(void) const {
+    return ((M5Dial.Encoder.read() + DIAL_COUNTER_STEP) / DIAL_COUNTER_STEP) -
+           1;
+}
+
 void M5ComboLock::reset(void) {
     this->_state = State::NOT_ENTERED;
     this->_pos = 0;
@@ -124,15 +124,15 @@ void M5ComboLock::showDialCount(int32_t count) {
                               M5Dial.Display.height() / 2 + DIAL_POS_Y_OFFSET);
 }
 
+void M5ComboLock::showLock(bool locked) {
+    M5Dial.Display.drawPngFile(SPIFFS,
+                               locked ? LOCK_ICON_PATH : UNLOCK_ICON_PATH,
+                               ICON_POS_X, ICON_POS_Y);
+}
+
 void M5ComboLock::resetDial(void) {
     M5Dial.Encoder.readAndReset();
     this->_prevElapsed = millis();
     this->_prevCount = getCount();
     showDialCount(this->_prevCount);
-}
-
-void M5ComboLock::showLock(bool locked) {
-    M5Dial.Display.drawPngFile(SPIFFS,
-                               locked ? LOCK_ICON_PATH : UNLOCK_ICON_PATH,
-                               ICON_POS_X, ICON_POS_Y);
 }

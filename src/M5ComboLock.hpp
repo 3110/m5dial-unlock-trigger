@@ -35,9 +35,9 @@ public:
     virtual bool begin(const int8_t dials[], size_t len,
                        std::function<bool(void)> onValid = nullptr);
     virtual bool update(void);
+
     virtual bool isRoteted(void) const;
     virtual int32_t getCount(void) const;
-
     virtual void reset(void);
 
 protected:
