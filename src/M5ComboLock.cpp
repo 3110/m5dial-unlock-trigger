@@ -118,7 +118,7 @@ void M5ComboLock::showDialCount(count_t count) {
     this->_canvas.createSprite(w, h);
     this->_canvas.setFont(this->_count_font);
     this->_canvas.setTextSize(1);
-    this->_canvas.setTextColor(GREEN);
+    this->_canvas.setTextColor(count >= 0 ? DIAL_RIGHT_COLOR : DIAL_LEFT_COLOR);
     this->_canvas.clear(TFT_BLACK);
     this->_canvas.drawCenterString(s, M5Dial.Display.width() / 2, 0,
                                    this->_count_font);

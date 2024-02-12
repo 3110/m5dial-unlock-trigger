@@ -17,6 +17,8 @@ public:
     static const unsigned long DIAL_INTERVAL_MS = 1500;
     static const unsigned long DIAL_TIMEOUT_MS = 5000;
 
+    static const int DIAL_RIGHT_COLOR = GREEN;
+    static const int DIAL_LEFT_COLOR = DIAL_RIGHT_COLOR;
     static const uint16_t DIAL_COUNT_POS_Y_OFFSET = 50;
 
     static const char* LOCK_ICON_PATH;
