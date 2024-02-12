@@ -15,7 +15,7 @@ public:
     static const size_t MAX_DIALS = 10;
     static const count_t DIAL_COUNT_STEP = 4;
     static const unsigned long DIAL_INTERVAL_MS = 1500;
-    static const unsigned long DIAL_TIMEOUT_MS = 5000;
+    static const unsigned long DIAL_TIMEOUT_MS = 3000;
 
     static const int DIAL_RIGHT_COLOR = GREEN;
     static const int DIAL_LEFT_COLOR = DIAL_RIGHT_COLOR;
