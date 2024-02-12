@@ -10,11 +10,13 @@ M5Dialを使ってダイヤル錠を解錠するように決まった回し方�
 
 [PlatformIO IDE](https://platformio.org/platformio-ide)上でコンパイル・インストールします。Windows 11上で動くVSCodeで動作確認をしています。
 
-### 1.2 アイコンファイルの転送
+### 1.2 アイコンファイルのアップロード
 
-`data`フォルダに置いてあるアイコンファイルをSPIFFS（SPI Flash File System）に転送します。
+`data`フォルダに置いてあるアイコンファイルを含むファイルシステムイメージを実機にアップロードします。
 
-PlatformIO メニューから「Upload Filesystem Image」を選択するか，コマンドラインから`pio run --target uploadfs`を実行してSPIFFS にアップロードします。
+注意：v0.0.2からSPIFFSからLittleFSに移行しました。v0.0.1がインストールされている場合は必ず以下を実行してください。
+
+PlatformIO メニューから「Upload Filesystem Image」を選択するか，コマンドラインから`pio run --target uploadfs`を実行してファイルシステムをアップロードします。
 
 ## 2. 実装方法
 
