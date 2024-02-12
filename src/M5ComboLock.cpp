@@ -101,7 +101,7 @@ bool M5ComboLock::isRoteted(void) const {
 }
 
 M5ComboLock::count_t M5ComboLock::getCount(void) const {
-    return ((M5Dial.Encoder.read() + DIAL_COUNT_STEP) / DIAL_COUNT_STEP) - 1;
+    return M5Dial.Encoder.read() / DIAL_COUNT_STEP;
 }
 
 void M5ComboLock::reset(void) {
