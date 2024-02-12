@@ -4,6 +4,11 @@
 M5BLEKeyboard keyboard("M5CombLock");
 M5ComboLock comboLock;
 
+inline void forever(void) {
+    while (true) {
+    }
+}
+
 const int8_t DIALS[] = {3, -1, 4, -1, 5, -9, 2, -6};
 const size_t N_DIALS = sizeof(DIALS) / sizeof(DIALS[0]);
 
@@ -27,7 +32,9 @@ bool onDisconnect(void) {
 
 void setup(void) {
     keyboard.begin(onConnect, onDisconnect);
-    comboLock.begin(DIALS, N_DIALS, onValid);
+    if (!comboLock.begin(DIALS, N_DIALS, onValid)) {
+        forever();
+    }
 }
 
 void loop(void) {

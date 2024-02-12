@@ -23,6 +23,8 @@ M5ComboLock::~M5ComboLock(void) {
 bool M5ComboLock::begin(const int8_t dials[], size_t len,
                         std::function<bool(void)> onValid) {
     if (len > MAX_DIALS) {
+        M5_LOGE("Dial combination is too long: expected = %d, actual = %d",
+                MAX_DIALS, len);
         return false;
     }
     this->_maxPos = len;

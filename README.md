@@ -26,7 +26,7 @@ PlatformIO メニューから「Upload Filesystem Image」を選択するか，�
 
 今回，実装例として`examples/BLEKeyboard`を用意しています。M5DialをBLEキーボードとしてPCに接続し，円周率の最初の8つの値（3.1415926）をそれぞれ左右に回す（右に3回，左に1回，右に4回…）と解錠できるようになっています。解錠できると，接続したPCに`CTRL+ALT+DELETE`を送ります。
 
-解錠のための回し方は`examples/BLEKeyboard/main.cpp`の`N_DIALS`で定義しています。右に回すときは正の値，左に回すときは負の値を指定します。
+解錠のための回し方は`examples/BLEKeyboard/main.cpp`の`DIALS`で定義しています。右に回すときは正の値，左に回すときは負の値を指定します。
 
 ## 3. TODO
 
