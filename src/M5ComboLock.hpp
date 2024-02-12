@@ -1,7 +1,7 @@
 #pragma once
 
 // clang-format off
-#include <SPIFFS.h>
+#include <LittleFS.h>
 #include <M5Dial.h>
 // clang-format on
 

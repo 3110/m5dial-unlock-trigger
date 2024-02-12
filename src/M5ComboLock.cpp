@@ -1,6 +1,6 @@
 #include "M5ComboLock.hpp"
 
-static const bool FORMAT_SPIFFS_IF_FAILED = true;
+static const bool FORMAT_LITTLEFS_IF_FAILED = true;
 const char* M5ComboLock::LOCK_ICON_PATH = "/lock.png";
 const char* M5ComboLock::UNLOCK_ICON_PATH = "/unlock.png";
 
@@ -14,6 +14,7 @@ M5ComboLock::M5ComboLock(const lgfx::GFXfont& font)
       _state(State::NOT_ENTERED),
       _count_font(&font),
       _canvas(&M5Dial.Display) {
+    this->_canvas.setFileStorage(LittleFS);
 }
 
 M5ComboLock::~M5ComboLock(void) {
@@ -32,8 +33,8 @@ bool M5ComboLock::begin(const int8_t dials[], size_t len,
 
     M5Dial.begin(ENABLE_ENCODER, ENABLE_RFID);
 
-    if (!SPIFFS.begin(FORMAT_SPIFFS_IF_FAILED)) {
-        M5_LOGE("Failed to mount SPIFFS");
+    if (!LittleFS.begin(FORMAT_LITTLEFS_IF_FAILED)) {
+        M5_LOGE("Failed to mount LittleFS");
         return false;
     }
 
@@ -130,8 +131,7 @@ void M5ComboLock::showDialCount(count_t count) {
 void M5ComboLock::showLockIcon(bool locked) {
     this->_canvas.createSprite(ICON_WIDTH, ICON_HEIGHT);
     this->_canvas.clear(TFT_BLACK);
-    this->_canvas.drawPngFile(SPIFFS,
-                              locked ? LOCK_ICON_PATH : UNLOCK_ICON_PATH);
+    this->_canvas.drawPngFile(locked ? LOCK_ICON_PATH : UNLOCK_ICON_PATH);
     this->_canvas.pushSprite(ICON_POS_X, ICON_POS_Y);
     this->_canvas.deleteSprite();
 }
