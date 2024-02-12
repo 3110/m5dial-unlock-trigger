@@ -112,7 +112,7 @@ void M5ComboLock::reset(void) {
 }
 
 void M5ComboLock::showDialCount(count_t count) {
-    const String s = String(count);
+    const String s = String(abs(count));
     const int32_t w = M5.Display.width();
     const int32_t h = M5.Display.fontHeight(this->_count_font);
     this->_canvas.createSprite(w, h);
