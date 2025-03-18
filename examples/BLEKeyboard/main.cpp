@@ -1,7 +1,7 @@
 #include "M5BLEKeyboard.hpp"
 #include "M5ComboLock.hpp"
 
-M5BLEKeyboard keyboard("M5CombLock");
+M5BLEKeyboard keyboard("M5ComboLock");
 M5ComboLock comboLock;
 
 inline void forever(void) {
